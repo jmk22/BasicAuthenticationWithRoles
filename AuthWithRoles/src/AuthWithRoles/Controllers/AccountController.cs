@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Identity;
 using AuthWithRoles.Models;
+using AuthWithRoles.ViewModels;
 
 namespace AuthWithRoles.Controllers
 {
@@ -20,6 +21,26 @@ namespace AuthWithRoles.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            var user = new ApplicationUser { UserName = model.Email };
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }
